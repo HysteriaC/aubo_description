@@ -166,6 +166,31 @@ aubo_i5_13 # i5标准版加长版末端360
 
 参考 [CONTRIBUTING.md](CONTRIBUTING.md)
 
+## 生成校准版 URDF
+
+可以使用 `scripts/calibrate_urdf_dh.py` 读取机器人 RPC 返回的 DH 校准补偿，并生成新的校准版 URDF 文件。
+脚本启动时会先检查运行依赖；当前至少需要 `numpy` 和可导入的 `pyaubo_sdk`。
+
+```bash
+python3 scripts/calibrate_urdf_dh.py \
+  --robot-model aubo_i10H \
+  --robot-ip 192.168.15.128 \
+  --temperature 20
+```
+
+也可以直接把 `--urdf-in` 写成机器人名称，脚本会自动到 `urdf/` 目录下查找对应文件：
+
+```bash
+python3 scripts/calibrate_urdf_dh.py \
+  --urdf-in aubo_i10H \
+  --robot-ip 192.168.15.128 \
+  --temperature 20
+```
+
+默认输出路径为 `urdf/<robot_model>_calibrated.urdf`，会直接和其他 `.urdf` 文件放在一起。脚本不会覆盖输入 URDF；若目标文件已存在，需要显式传入 `--force`。
+
+生成新的校准版 URDF 后，需要重新执行 `colcon build --packages-select aubo_description`，使新文件被正确安装到工作空间。
+
 # 在 gazebo 中仿真 aubo 机器人（以 aubo_i5 为例）
 
 roslaunch aubo_gazebo aubo_bringup.launch robot_model:=aubo_i5
@@ -184,6 +209,3 @@ roslaunch aubo_i5_moveit_config moveit_rviz.launch
 
 
 ​	
-
-
-

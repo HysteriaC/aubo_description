@@ -16,6 +16,10 @@ if (DEFINED ENV{ROS_DISTRO})
     	install(DIRECTORY launch DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION})
     	install(DIRECTORY urdf DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION})
     	install(DIRECTORY meshes DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION})
+    	install(PROGRAMS
+    	  scripts/calibrate_urdf_dh.py
+    	  DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
+    	)
     endif()
     if(${ROS_VERSION} EQUAL 2)
     	cmake_minimum_required(VERSION 3.8)
@@ -43,8 +47,11 @@ if (DEFINED ENV{ROS_DISTRO})
         install(DIRECTORY
              launch meshes urdf rviz
              DESTINATION share/${PROJECT_NAME}/
-             )            
+             )
+        install(PROGRAMS
+             scripts/calibrate_urdf_dh.py
+             DESTINATION lib/${PROJECT_NAME}
+             )
         ament_package()    	
     endif()
 endif()
-
